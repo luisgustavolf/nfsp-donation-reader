@@ -1,0 +1,10 @@
+.injectedWrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  border: 1px solid blue;
+}
+
+#injectedWebcam {
+  width: 100%;
+}
