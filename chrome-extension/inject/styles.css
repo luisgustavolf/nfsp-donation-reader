@@ -8,3 +8,7 @@
 #injectedWebcam {
   width: 100%;
 }
+
+#injectedCanvas {
+  display: none;
+}
