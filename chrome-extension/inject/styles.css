@@ -2,7 +2,12 @@
   display: flex;
   gap: 20px;
   align-items: center;
-  border: 1px solid blue;
+}
+
+#injectedWebcamContainer {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
 }
 
 #injectedWebcam {
@@ -11,4 +16,9 @@
 
 #injectedCanvas {
   display: none;
+}
+
+#injectedReadImageBtn {
+  padding: 10px;
+  font-size: 20px;
 }

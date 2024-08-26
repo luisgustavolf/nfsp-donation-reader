@@ -25,11 +25,19 @@ function injectHtmlNewStructure() {
     </div>
     <div id='injectedWebcamContainer'>
       <div>
+        Posicione um cupon, com foco no número da Nota Fiscal, e pressione <b>Ler Imagem</b>. <br/>
+        O código tem um formato como: "3524 0003 1856 5600 0114 6500 3000 0075 0410 3007 8012" <br />
+        Se o código for encontrado, será automaticamente preenchido no campo "Chave de Acesso". <br />
+        É sempre importante, verificar se o numero está bem focado e iluminado.
+      </div>
+      <div>
         <video autoplay="true" id="injectedWebcam"></video>
         <canvas id="injectedCanvas"/>
       </div>
       <div>
-        <button type="button" id="injectedRegisterBtn">Registrar Cupon</button>
+        <button type="button" id="injectedReadImageBtn">
+          Ler Imagem
+        </button>
       </div>
     </div>
   `
@@ -39,8 +47,8 @@ function injectHtmlNewStructure() {
 
   currentContainerEl.parentNode.append(injectedWrapperEl)
 
-  const injectedRegisterBtn = document.getElementById('injectedRegisterBtn')
-  injectedRegisterBtn.onclick = handleRegisterCupon
+  const injectedReadImageBtn = document.getElementById('injectedReadImageBtn')
+  injectedReadImageBtn.onclick = handleRegisterCupon
 
   const injectedCurrentContainer = document.getElementById('injectedCurrentContainer')
   injectedCurrentContainer.appendChild(currentContainerEl)
@@ -95,13 +103,20 @@ function getSaveBtnEl() {
 }
 
 /**
+ * Get Read Cupon Button Element
+ * @returns {HTMLButtonElement | null}
+ */
+function getReadCuponBtnEl() {
+  return document.getElementById('injectedReadImageBtn')
+}
+
+/**
  * Get snapshot from webcam
  * @returns {string}
  */
 function takeAVideoSnapshotOnCanvasElement() {
   const video = getWebcamEl()
   const canvas = getCanvasEl()
-  console.log(video.clientWidth, video.clientHeight)
   canvas.width = video.clientWidth
   canvas.height = video.clientHeight
   canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -113,14 +128,41 @@ function takeAVideoSnapshotOnCanvasElement() {
  * @param {MouseEvent} evt 
  */
 async function handleRegisterCupon(evt) {
-  const canvasEl = takeAVideoSnapshotOnCanvasElement()
+  const readCuponBen = getReadCuponBtnEl()
+  readCuponBen.disabled = true
+  const recognizedText = await recognizeTextFromWebcam()
+  const cupon = getCuponCodeFromText(recognizedText)
+  readCuponBen.disabled = false
   
-  console.log("Recognizing...");
+  if (!cupon) {
+    alert('Codigo não encontrado')
+    return
+  } 
+
+  getInputEl().value = cupon.replaceAll(' ', '-')
+}
+
+
+/**
+ * Extract text from the video feedback
+ * @returns {Promise<text>}
+ */
+async function recognizeTextFromWebcam() {
+  const canvasEl = takeAVideoSnapshotOnCanvasElement()
   const { data: { text } } = await TESSERACT_WORKER.recognize(canvasEl);
-  console.log("Recognized text:", text);
-  // await tesseractWorker.terminate();
-  // const code = await sendRequest(base64Image)
-  // console.log(code)
+  return text
+}
+
+
+/**
+ * Extract a NFSP number from a text
+ * @param {string} text
+ * @returns {string | null} 
+ */
+function getCuponCodeFromText(text) {
+  const pattern = /(\d{4}\s){10}\d{4}/
+  const found = text.match(pattern)
+  return !found ? null : found[0]
 }
 
 // ---------------------------------------
