@@ -1,10 +1,17 @@
-
 /**
  * Bootstrap method
  */
-function main() {
+
+let TESSERACT_WORKER;
+
+async function main() {
+  setupTesseractWorker();
   injectHtmlNewStructure();
   startWebcam();
+}
+
+async function setupTesseractWorker() {
+  TESSERACT_WORKER = await Tesseract.createWorker('eng');
 }
 
 /**
@@ -91,33 +98,14 @@ function getSaveBtnEl() {
  * Get snapshot from webcam
  * @returns {string}
  */
-function getImageFromWebcam() {
+function takeAVideoSnapshotOnCanvasElement() {
   const video = getWebcamEl()
   const canvas = getCanvasEl()
   console.log(video.clientWidth, video.clientHeight)
   canvas.width = video.clientWidth
   canvas.height = video.clientHeight
   canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-  return canvas.toDataURL('image/jpeg');
-}
-
-/**
- * Sends request for the cupon processing
- * @param {string} base64Image 
- * @returns {Promise<string|null>}
- */
-async function sendRequest(base64Image) {
-  const formData = new FormData()
-  formData.append('base64_image', base64Image)
-  const url = 'http://localhost:8000/read_cupon'
-  const request = await fetch(url, {
-    method: 'post',
-    body: formData
-  })
-
-  /** @type {{code: string | null}} */
-  const json = await request.json()
-  return json.code
+  return canvas
 }
 
 /**
@@ -125,9 +113,14 @@ async function sendRequest(base64Image) {
  * @param {MouseEvent} evt 
  */
 async function handleRegisterCupon(evt) {
-  const base64Image = getImageFromWebcam()
-  const code = await sendRequest(base64Image)
-  console.log(code)
+  const canvasEl = takeAVideoSnapshotOnCanvasElement()
+  
+  console.log("Recognizing...");
+  const { data: { text } } = await TESSERACT_WORKER.recognize(canvasEl);
+  console.log("Recognized text:", text);
+  // await tesseractWorker.terminate();
+  // const code = await sendRequest(base64Image)
+  // console.log(code)
 }
 
 // ---------------------------------------

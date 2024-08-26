@@ -11,7 +11,10 @@ chrome.webNavigation.onDOMContentLoaded.addListener(async ({ tabId, url }) => {
   if (!URLS.includes(url)) return;
   await chrome.scripting.executeScript({
     target: { tabId },
-    files: ['inject/script.js'],
+    files: [
+      'inject/tesseract.min.js',
+      'inject/script.js'
+    ],
   });
 
   await chrome.scripting.insertCSS({

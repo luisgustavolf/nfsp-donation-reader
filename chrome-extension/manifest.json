@@ -3,9 +3,6 @@
   "version": "1.0",
   "manifest_version": 3,
   "description": "Uses the chrome.scripting API to inject JavaScript into web pages.",
-  "background": {
-    "service_worker": "sw.js"
-  },
   "permissions": [
     "scripting",
     "webNavigation",
@@ -15,5 +12,8 @@
     "http://localhost:3000/*",
     "https://www.nfp.fazenda.sp.gov.br/*"
   ],
+  "background": {
+    "service_worker": "sw.js"
+  },
   "action": {}
 }
