@@ -1,24 +1,3 @@
-# chrome.scripting API
+Esta extensão injeta sua câmera na página de doações da Nota Fiscal Paulista.
 
-This sample demonstrates using the [chrome.scripting](https://developer.chrome.com/docs/extensions/reference/scripting/) API to inject JavaScript into web pages.
-
-## Overview
-
-Once this extension is installed, clicking this extension's action icon will open an extension page.
-
-<img src="screenshot.png" height=300 alt="Screenshot showing the chrome.scripting API demo running in Chrome.">
-
-## Features
-
-This sample allows you to experiment with the following injection mechanisms:
-
-- [Dynamic Declarations](https://developer.chrome.com/docs/extensions/mv3/content_scripts/#dynamic-declarative), where a content script is registered at runtime.
-- [Programmatic Injection](https://developer.chrome.com/docs/extensions/mv3/content_scripts/#programmatic), where a script is programatically executed in a tab which is already open.
-
-Learn more at https://developer.chrome.com/docs/extensions/mv3/content_scripts/.
-
-## Implementation Notes
-
-Programmatic injection is handled in the service worker. A tab is opened to a specific URL (https://example.com/#inject-programmatic). When the page finishes loading, a script is then run using `chrome.scripting.executeScript`.
-
-When registering a dynamic content script, a tab is automatically opened if using the default matches URL. Otherwise, no tab is opened and the correct URL needs to be manually navigated to.
+Com esse mecanismo, o usuário poderá simplesmente escanear a nota, e a extensão tentará encontrar um número com formato semelhante a 524 0003 1856 5600 0114 6500 3000 0075 0410 3007 8012. Caso encontre, o campo "Chave de Acesso" será preenchido automaticamente.

@@ -1,12 +1,11 @@
 {
-  "name": "Scripting API Demo",
-  "version": "1.0",
+  "name": "NFSP Scanner",
+  "version": "1.0.0",
   "manifest_version": 3,
-  "description": "Uses the chrome.scripting API to inject JavaScript into web pages.",
+  "description": "Esta extensão injeta sua câmera na página de doações da Nota Fiscal Paulista.",
   "permissions": [
     "scripting",
-    "webNavigation",
-    "storage"
+    "webNavigation"
   ],
   "host_permissions": [
     "http://localhost:3000/*",

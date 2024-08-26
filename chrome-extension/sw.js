@@ -1,6 +1,7 @@
 const URLS = [
   'http://localhost:3000/',
-  'https://www.nfp.fazenda.sp.gov.br/EntidadesFilantropicas/ListagemNotaEntidade.aspx'
+  'https://www.nfp.fazenda.sp.gov.br/EntidadesFilantropicas/ListagemNotaEntidade.aspx',
+  'https://www.nfp.fazenda.sp.gov.br/EntidadesFilantropicas/CadastroNotaEntidade.aspx'
 ]
 
 chrome.action.onClicked.addListener(() => {
